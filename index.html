@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #app {
+        width: 100px;
+        height: 100px;
+        background-color: red;
+        position: relative;
+      }
+      .drag {
+        background-color: yellow;
+        height: 20px;
+        cursor: all-scroll;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" style="left: 0; top: 0">
+      <div class="drag"></div>
+    </div>
+    <script>
+      var lastPageX, lastPageY
+      var drag = document.querySelector('.drag')
+      drag.addEventListener(
+        'mousedown',
+        function (e) {
+          e.stopPropagation()
+          var pageX = e.pageX
+          var pageY = e.pageY
+          lastPageX = pageX
+          lastPageY = pageY
+          document.addEventListener('mousemove', documentMouseMove)
+          document.addEventListener('mouseup', function () {
+            document.removeEventListener('mousemove', documentMouseMove)
+          })
+        },
+        false
+      )
+      drag.addEventListener('mouseup', function (e) {
+        document.removeEventListener('mousemove', documentMouseMove)
+      })
+      function documentMouseMove(e) {
+        var pageX = e.pageX
+        var pageY = e.pageY
+        var deltaPageX = pageX - lastPageX
+        var deltaPageY = pageY - lastPageY
+        lastPageX = pageX
+        lastPageY = pageY
+        var left = parseFloat(app.style.left) + deltaPageX
+        var top = parseFloat(app.style.top) + deltaPageY
+        if (left < -8 || top < -8) {
+          return
+        }
+        app.style.left = left + 'px'
+        app.style.top = top + 'px'
+      }
+    </script>
+  </body>
+</html>
